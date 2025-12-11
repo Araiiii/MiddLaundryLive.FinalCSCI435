@@ -30,6 +30,8 @@ Attaches to the ESP32 to measure vibration and motion.
 ##### 3. Optional: Lithium Battery Pack & Magnets
 Powers the above 2 components and connects magnetically for portable use in laundry rooms.
 
+###### see reference image 1.1
+
 We connected the LSM6DSOX to the ESP32 over I²C using custom SDA/SCL pins (SDA = GPIO 23, SCL = GPIO 22 using Twowire; otherwise 21 and 22 as default) or if using the ESP32 V2 we connected directly with a QT wire. The device was housed in a small enclosure that we adhered to machines with strong magnets, allowing for a flat surface for accurate readings, easy mounting, and removal.
 
 #### The LSM6DSOX
@@ -39,6 +41,8 @@ We decided on the LSM6DSOX because of its precise accelerometer capabilities, lo
 #### Bill Of Materials (BOM)
 
 link here: https://docs.google.com/spreadsheets/d/1i75-UsUPBVsZZJmRdL-ENZNd7RExQrMRsME6GZocTyc/edit
+
+###### see reference image 1.2
 
 This leaves us with a cost per unit of 47.35. 
 
@@ -68,6 +72,8 @@ The core challenge in vibration detection is distinguishing normal idle vibratio
 
 Immediately after startup, the system spends ~30 seconds determining a baseline for the vibration magnitude. During this time, the sensor uses a running average to compute the mean magnitude of sensor readings while the machine is presumed off. Then in detection mode this mean magnitude constant is subtracted from the sensor readings to remove the orientation the sensor was installed and the acceleration the sensor experiences due to gravity. This helps center the readings about 0, which allows the sensor to spot variations in the vibrations. 
 
+###### see reference image 1.3
+
 ##### Detection State
 
 Once calibrated, the system enters the detection mode. Here we implemented an exponential moving average (EMA) smoothing technique on a short-window RMS-like value:
@@ -94,8 +100,13 @@ laundry/<building>/<machineID>/data
 For example:
 laundry/Battell/02/data
 
+###### see reference image 1.4
+
 Messages were published every couple hundred cycles(about 5 seconds), ensuring a near-real-time update rate without excessive network traffic.
+
 We initially tested MQTT publishing using the IoT MQTT Panel mobile app. The ability to visualize the real-time graphs, values, and state changes confirmed that our embedded system was transmitting accurately long before the website was complete.
+
+###### see reference image 1.5-6
 
 #### Website Interface
 
@@ -186,6 +197,8 @@ Several challenges arose during development:
 - Website MQTT Syntax Issues: Parsing machine IDs from topic strings caused early bugs where multiple machines overwrote each other.
 
 - Physical Mounting: The system needed strong magnetic mounting to detect vibration consistently.
+
+###### see reference image 1.7-8
 
 ### Future Implementations
 
